@@ -1,0 +1,156 @@
+/* ------------------Imagen de fondo------------------ */ 
+
+#fondoTab1, #fondoTab2, #fondoTab3, #fondoTab4{
+    -fx-background-image: url(img/cabecera.png);
+}
+
+/* ------------------Nuestros productos------------------ */
+
+#separador1, #separador2, #separador3{
+    -fx-background-color: red;
+}
+
+#panePizza1, #panePizza2, #panePizza3, #paneLogin{
+    -fx-background-color: rgba(193,8,16,0.3);
+    -fx-background-radius: 15px;
+}
+
+#panePizza1:hover, #panePizza2:hover, #panePizza3:hover, #paneLogin:hover{
+    -fx-background-color: rgba(193,8,16,1);
+}
+
+#pane1{
+    -fx-background-image: url(img/pizzaCuatroQuesos.png);
+    -fx-background-size: 95px 75px;
+    -fx-background-repeat: no-repeat;
+}
+#pane2{
+    -fx-background-image: url(img/pizzaBbq.png);
+    -fx-background-size: 95px 75px;
+    -fx-background-repeat: no-repeat;
+}
+#pane3{
+    -fx-background-image: url(img/pizzaMargarita.png);
+    -fx-background-size: 95px 75px;
+    -fx-background-repeat: no-repeat;
+}
+
+#finalizarCompra, #botonMostrarTodos, #botonBuscarPrecio, #botonGenerarTicket{
+    -fx-background-color: linear-gradient(#c10810 0%, #dc0914 25%, #f6232d 75%, #f8545c 100%);
+}
+
+#finalizarCompra:hover, #botonMostrarTodos:hover, #botonBuscarPrecio:hover, #botonGenerarTicket:hover{
+    -fx-background-color: #f73b45;
+}
+
+/* ------------------Pizza al gusto------------------ */
+
+
+#paneMasa, #paneTipoPizza, #paneIngredientes, #paneTamano, #panePedido{
+    -fx-background-color: rgba(193,8,16,0.3);
+    -fx-background-radius: 15px;
+}
+
+#paneMasa:hover, #paneTipoPizza:hover, #paneIngredientes:hover, #paneTamano:hover, #panePedido:hover{
+    -fx-background-color: rgba(193,8,16,1);
+}
+
+#paneFuego{
+    -fx-background-image: url(img/picante4.png);
+    -fx-background-repeat: no-repeat;
+}
+
+
+/* ESTILO TabPane */
+.tab-pane{
+    -fx-tab-min-width:159px;
+}
+
+.tab-pane .tab{
+    -fx-background-color: rgba(195,8,15,0.8);
+
+}
+
+.tab-pane .tab:selected{
+    -fx-background-color: rgb(135,0,6);
+}
+
+.tab .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.tab:selected .tab-label { 
+    -fx-alignment: CENTER;
+    -fx-text-fill: #ffffff;
+}
+
+/* ESTILO ListView */
+.list-cell{
+    -fx-font-weight: bold;
+    -fx-font-style: italic;
+    -fx-font-size: 14px;
+}
+
+.list-cell:filled:selected { /*color con degradado y cambio de texto a blanco del elemento seleccionado antes y despues de seleccionarlo*/
+    -fx-background-color: linear-gradient(#c10810 0%, #f8545c 100%);
+    -fx-text-fill: white;
+}
+
+/*#listViewIngredientes:even { color de fondo primera linea del list
+    -fx-background-color: rgba(193,8,16,0.3);
+}
+
+#listViewIngredientes:odd{
+    -fx-background-color: rgba(193,8,16,0.5); color de findo segunda linea del list
+}*/
+
+.list-cell:filled:hover { /*Hover Ingredientes extra */
+    -fx-background-color: linear-gradient(#c10810 0%, #f8545c 100%);
+    -fx-text-fill: white;
+}
+
+/* Spinner */
+/* No tiene CSS Property */
+
+/* ------------------Precios------------------ */
+#paneJamon, #paneQueso, #paneTomate, #paneCebolla, #paneOlivas{
+    -fx-background-color: rgba(193,8,16,0.3);
+    -fx-background-radius: 15px;
+}
+
+#paneJamon:hover, #paneQueso:hover, #paneTomate:hover, #paneCebolla:hover, #paneOlivas:hover{
+    -fx-background-color: rgba(193,8,16,1);
+}
+
+#paneImgJamon{
+    -fx-background-image: url(img/jamonIcon.png);
+}
+
+#paneImgQueso{
+    -fx-background-image: url(img/quesoIcon.png);
+}
+
+#paneImgTomate{
+    -fx-background-image: url(img/tomateIcon.png);
+}
+
+#paneImgCebolla{
+    -fx-background-image: url(img/cebollaIcon.png);
+}
+
+#paneImgOlivas{
+    -fx-background-image: url(img/olivasIcon.png);
+}
+
+/* ------------------Administracion------------------ */
+
+#botonLogin, #botonAplicarCambios, #botonCerrarSesion {
+    -fx-background-color: linear-gradient(#c10810 0%, #dc0914 25%, #f6232d 75%, #f8545c 100%);
+}
+
+#botonLogin:hover, #botonAplicarCambios:hover, #botonCerrarSesion:hover{
+    -fx-background-color: #f73b45;
+}
