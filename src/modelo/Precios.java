@@ -1,32 +1,22 @@
 package modelo;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Optional;
+import java.util.StringTokenizer;
+import java.util.stream.Stream;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 
 public class Precios {
     
     private final Map<String, Double> precios = new HashMap<>();
-    
-    {
-        precios.put("Normal", 9.0);
-        precios.put("Integral", 9.50);
-        precios.put("Basica", 3.0);
-        precios.put("Cuatro Quesos", 5.0);
-        precios.put("Barbacoa", 7.0);
-        precios.put("Mexicana", 8.5);
-        precios.put("Sin extra", 0.0);
-        precios.put("Jamon", 0.5);
-        precios.put("Queso", 0.75);
-        precios.put("Tomate", 1.5);
-        precios.put("Cebolla", 2.5);
-        precios.put("Olivas", 1.0);
-        precios.put("Pequeña", 1.0);
-        precios.put("Mediana", 1.15);
-        precios.put("Grande", 1.30);
-
-    }
-    
-    
+        
     public void modificarPrecios(String nombre, double cantidad) {
         precios.computeIfPresent(nombre, (k, v) -> cantidad);
     }
@@ -42,5 +32,43 @@ public class Precios {
         
         return precio;
     }
+    
+    
+     public void cargarPrecios(File archivoOrigen) {
+        String leido, categoria, cantidad;
+        double precio;
+        String destino = archivoOrigen.getAbsolutePath();
+        Path archivo = Paths.get(destino);
+
+        try (Stream<String> datos = Files.lines(archivo)) {
+            Iterator<String> it = datos.iterator();
+            while (it.hasNext()) {
+                leido = it.next();
+
+                StringTokenizer t1 = new StringTokenizer(leido, ":");
+
+                categoria = t1.nextToken();
+                cantidad = t1.nextToken();
+                precio = Double.parseDouble(cantidad);
+
+                precios.put(categoria, precio);
+            }
+
+            Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+            dialogoAlerta.setTitle("PIZZA PLANET");
+            dialogoAlerta.setHeaderText("Los precios se han cargado con exito");
+
+            Optional<ButtonType> result = dialogoAlerta.showAndWait();
+
+        } catch (Exception e) {
+            Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
+            dialogoAlerta.setTitle("PIZZA PLANET");
+            dialogoAlerta.setHeaderText("Error al cargar los precios");
+
+            Optional<ButtonType> result = dialogoAlerta.showAndWait();
+        }
+
+    }
+
    
 }

@@ -1,15 +1,10 @@
 package modelo;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
@@ -112,8 +107,8 @@ public class Pizza {
         String texto = "";
         String textoIngredinetes = "";
 
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
-//        formato = date.format(formatter);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH'h' mm'm' ss's'");
+        formato = date.format(formatter);
 
         for (String ingredientes : preciosExtra) {
             textoIngredinetes += ingredientes.toUpperCase() + ": " + precios.buscarPrecio(ingredientes) + "€\n";
@@ -124,7 +119,7 @@ public class Pizza {
                 + "\nTAMAÑO PIZZA --> " + this.tamano + ": " + precios.buscarPrecio(this.tamano) + "%"
                 + "\nINGREDITENES\n" + textoIngredinetes;
 
-        Path fichero = Paths.get(date + "-ticket.txt");
+        Path fichero = Paths.get(formato + "-ticket.txt");
 
         try (Writer bf = Files.newBufferedWriter(fichero)  ) {
             bf.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
@@ -136,5 +131,5 @@ public class Pizza {
 //        }
 
     }
-
+    
 }

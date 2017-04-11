@@ -1,5 +1,6 @@
 package pizzav10;
 
+import java.io.File;
 import java.io.IOException;
 import modelo.Pizza;
 import java.net.URL;
@@ -8,6 +9,7 @@ import java.util.StringTokenizer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Alert;
@@ -20,11 +22,17 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.SelectionMode;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import modelo.Precios;
 
 public class FXMLDocumentController implements Initializable {
@@ -129,6 +137,22 @@ public class FXMLDocumentController implements Initializable {
     private TextField precioCambiarJamon;
     @FXML
     private Button botonCerrarSesion;
+    @FXML
+    private Button btCargarPrecios;
+    @FXML
+    private Pane paneMasa;
+    @FXML
+    private Pane paneTipoPizza;
+    @FXML
+    private Pane paneIngredientes;
+    @FXML
+    private Pane paneTamano;
+    @FXML
+    private Pane panePedido;
+    @FXML
+    private Tab tabPizzaGusto;
+    @FXML
+    private Button botonGenerarTicket;
 
     //LISTAS
     ObservableList<String> listaTipoPizzas = FXCollections.observableArrayList("Basica", "Cuatro Quesos", "Barbacoa", "Mexicana");
@@ -142,6 +166,42 @@ public class FXMLDocumentController implements Initializable {
 
     //ATRIBUTOS
     String tipoMasa, tipoPizza, tamano;
+    @FXML
+    private Tab tab2;
+    @FXML
+    private AnchorPane fondoTab1;
+    @FXML
+    private Pane pane1;
+    @FXML
+    private Pane pane2;
+    @FXML
+    private Button finalizarCompra;
+    @FXML
+    private Pane pane3;
+    @FXML
+    private AnchorPane fondoTab2;
+    @FXML
+    private ToggleGroup tiposPizza;
+    @FXML
+    private AnchorPane fondoTab3;
+    @FXML
+    private Button botonBuscarPrecio;
+    @FXML
+    private Pane paneTodosIngredientes;
+    @FXML
+    private Tab paneAdmin;
+    @FXML
+    private AnchorPane fondoTab4;
+    @FXML
+    private Pane paneJamon1;
+    @FXML
+    private Pane paneQueso1;
+    @FXML
+    private Pane paneTomate1;
+    @FXML
+    private Pane paneCebolla1;
+    @FXML
+    private Pane paneOlivas1;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -171,7 +231,6 @@ public class FXMLDocumentController implements Initializable {
 //        STYLE_CLASS_SPLIT_ARROWS_VERTICAL
 //        STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL
         //TAB PRECIOS
-        paneNotFound.setStyle("-fx-background-image: url(img/404.gif); -fx-background-size: 207px 200px;");
 
         paneJamon.setVisible(false);
         paneQueso.setVisible(false);
@@ -180,6 +239,13 @@ public class FXMLDocumentController implements Initializable {
         paneOlivas.setVisible(false);
         paneNotFound.setVisible(false);
         labelNotFound.setVisible(false);
+
+        //Pizza al gusto
+        paneMasa.setDisable(true);
+        paneTipoPizza.setDisable(true);
+        paneIngredientes.setDisable(true);
+        paneTamano.setDisable(true);
+        panePedido.setDisable(true);
 
         //Administracion
         paneCambiarPrecio.setVisible(false);
@@ -534,8 +600,55 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void generarTicket(ActionEvent event) throws IOException {
-        pizza.generarTicket();
-        
+
+        Alert alertaFaltaIngredientes = new Alert(AlertType.WARNING);
+        alertaFaltaIngredientes.setTitle("RedHotPizza");
+        alertaFaltaIngredientes.setHeaderText("Por favor, elija el tipo de masa/pizza/tamaño.");
+
+        Alert alertaTicketGenerado = new Alert(AlertType.INFORMATION);
+        alertaTicketGenerado.setTitle("RedHotPizza");
+        alertaTicketGenerado.setHeaderText("Ticket generado. ¡Gracias por su compra!");
+
+        if (tipoMasa != null && tipoPizza != null && tamano != null) {
+            pizza.generarTicket();
+            alertaTicketGenerado.showAndWait();
+        } else {
+            alertaFaltaIngredientes.showAndWait();
+        }
+
+    }
+
+    @FXML
+    private void cargarPrecios(ActionEvent event) {
+
+        if (btCargarPrecios.isFocused()) {
+            FileChooser fc = new FileChooser();
+            File archivoOrigen = fc.showOpenDialog(new Stage());
+            if (archivoOrigen != null) {
+                precios.cargarPrecios(archivoOrigen);
+
+                paneMasa.setDisable(false);
+                paneTipoPizza.setDisable(false);
+                paneIngredientes.setDisable(false);
+                paneTamano.setDisable(false);
+                panePedido.setDisable(false);
+            }
+        }
+
+    }
+
+    @FXML
+    private void tabClickar(Event event) {
+//        SingleSelectionModel<Tab> selectionModel = tabPizzaGusto.getSelectionModel();
+
+        if (panePedido.isDisable()) {
+            Alert alertaFaltaCargaPrecios = new Alert(AlertType.WARNING);
+            alertaFaltaCargaPrecios.setTitle("RedHotPizza");
+            alertaFaltaCargaPrecios.setHeaderText("Por favor, cargue los precios primero.");
+            alertaFaltaCargaPrecios.showAndWait();
+//            selectionModel
+        }
+
     }
 
 }

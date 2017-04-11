@@ -35,11 +35,11 @@
     -fx-background-repeat: no-repeat;
 }
 
-#finalizarCompra, #botonMostrarTodos, #botonBuscarPrecio, #botonGenerarTicket{
+#finalizarCompra, #botonMostrarTodos, #botonBuscarPrecio, #botonGenerarTicket, #btCargarPrecios{
     -fx-background-color: linear-gradient(#c10810 0%, #dc0914 25%, #f6232d 75%, #f8545c 100%);
 }
 
-#finalizarCompra:hover, #botonMostrarTodos:hover, #botonBuscarPrecio:hover, #botonGenerarTicket:hover{
+#finalizarCompra:hover, #botonMostrarTodos:hover, #botonBuscarPrecio:hover, #botonGenerarTicket:hover, #btCargarPrecios:hover{
     -fx-background-color: #f73b45;
 }
 
@@ -117,8 +117,12 @@
 
 /* ------------------Precios------------------ */
 #paneJamon, #paneQueso, #paneTomate, #paneCebolla, #paneOlivas{
-    -fx-background-color: rgba(193,8,16,0.3);
+    -fx-background-color: rgba(193,8,16,0.5);
     -fx-background-radius: 15px;
+}
+
+#paneNotFound{
+    -fx-background-image: url(img/404.gif); -fx-background-size: 207px 200px;
 }
 
 #paneJamon:hover, #paneQueso:hover, #paneTomate:hover, #paneCebolla:hover, #paneOlivas:hover{

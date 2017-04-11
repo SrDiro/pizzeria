@@ -154,7 +154,7 @@
                         </AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Pizza al gusto">
+                <Tab fx:id="tabPizzaGusto" onSelectionChanged="#tabClickar" text="Pizza al gusto">
                     <content>
                         <AnchorPane fx:id="fondoTab2" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@css.css">
                             <children>
@@ -402,7 +402,7 @@
                      </children></AnchorPane>
                     </content>
                 </Tab>
-                <Tab text="Administración">
+                <Tab fx:id="paneAdmin" text="Administración">
                     <content>
                         <AnchorPane fx:id="fondoTab4" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" stylesheets="@css.css">
                      <children>
@@ -426,7 +426,7 @@
                                  </font></Button>
                            </children>
                         </Pane>
-                        <Pane fx:id="paneCambiarPrecio" layoutX="23.0" layoutY="15.0" prefHeight="379.0" prefWidth="636.0">
+                        <Pane fx:id="paneCambiarPrecio" layoutX="33.0" layoutY="15.0" prefHeight="379.0" prefWidth="636.0">
                            <children>
                               <Pane id="paneJamon" fx:id="paneJamon1" layoutX="63.0" layoutY="14.0" prefHeight="125.0" prefWidth="90.0" stylesheets="@css.css">
                                  <children>
@@ -473,7 +473,7 @@
                                     </Label>
                                  </children>
                               </Pane>
-                              <Pane id="paneCebolla" fx:id="paneCebolla1" layoutX="170.0" layoutY="181.0" prefHeight="125.0" prefWidth="90.0" stylesheets="@css.css">
+                              <Pane id="paneCebolla" fx:id="paneCebolla1" layoutX="175.0" layoutY="139.0" prefHeight="125.0" prefWidth="90.0" stylesheets="@css.css">
                                  <children>
                                     <Pane id="paneImgCebolla" layoutX="18.0" layoutY="33.0" prefHeight="54.0" prefWidth="54.0" stylesheets="@css.css" />
                                     <Label layoutX="6.0" layoutY="1.0" text="Cebolla" textFill="WHITE" underline="true">
@@ -488,7 +488,7 @@
                                     </Label>
                                  </children>
                               </Pane>
-                              <Pane id="paneOlivas" fx:id="paneOlivas1" layoutX="376.0" layoutY="181.0" prefHeight="125.0" prefWidth="90.0" stylesheets="@css.css">
+                              <Pane id="paneOlivas" fx:id="paneOlivas1" layoutX="372.0" layoutY="139.0" prefHeight="125.0" prefWidth="90.0" stylesheets="@css.css">
                                  <children>
                                     <Pane id="paneImgOlivas" layoutX="18.0" layoutY="33.0" prefHeight="54.0" prefWidth="54.0" stylesheets="@css.css" />
                                     <Label layoutX="12.0" layoutY="1.0" text="Olivas" textFill="WHITE" underline="true">
@@ -506,14 +506,19 @@
                               <TextField fx:id="precioCambiarJamon" layoutX="84.0" layoutY="139.0" prefHeight="25.0" prefWidth="49.0" />
                               <TextField fx:id="precioCambiarQueso" layoutX="294.0" layoutY="139.0" prefHeight="25.0" prefWidth="49.0" />
                               <TextField fx:id="precioCambiarTomate" layoutX="504.0" layoutY="139.0" prefHeight="25.0" prefWidth="49.0" />
-                              <TextField fx:id="precioCambiarCebolla" layoutX="190.0" layoutY="306.0" prefHeight="25.0" prefWidth="49.0" />
-                              <TextField fx:id="precioCambiarOlivas" layoutX="396.0" layoutY="306.0" prefHeight="25.0" prefWidth="49.0" />
-                              <Button fx:id="botonAplicarCambios" layoutX="265.0" layoutY="177.0" mnemonicParsing="false" onAction="#aplicarCambios" text="Aplicar cambios" textFill="WHITE">
+                              <TextField fx:id="precioCambiarCebolla" layoutX="195.0" layoutY="264.0" prefHeight="25.0" prefWidth="49.0" />
+                              <TextField fx:id="precioCambiarOlivas" layoutX="392.0" layoutY="264.0" prefHeight="25.0" prefWidth="49.0" />
+                              <Button fx:id="botonAplicarCambios" layoutX="122.0" layoutY="325.0" mnemonicParsing="false" onAction="#aplicarCambios" text="Aplicar cambios" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold Italic" size="12.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="botonCerrarSesion" layoutX="273.0" layoutY="231.0" mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar sesion" textFill="WHITE">
+                              <Button fx:id="botonCerrarSesion" layoutX="404.0" layoutY="325.0" mnemonicParsing="false" onAction="#cerrarSesion" text="Cerrar sesion" textFill="WHITE">
+                                 <font>
+                                    <Font name="System Bold Italic" size="12.0" />
+                                 </font>
+                              </Button>
+                              <Button fx:id="btCargarPrecios" layoutX="269.0" layoutY="325.0" mnemonicParsing="false" onAction="#cargarPrecios" text="Cargar precios" textFill="WHITE">
                                  <font>
                                     <Font name="System Bold Italic" size="12.0" />
                                  </font>
