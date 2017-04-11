@@ -14,11 +14,13 @@ public class Pizza {
 
     Precios precios = new Precios();
 
+    private double precioTotal;
     private String masa;
     private String tipoPizza;
     private String tamano;
     static int contador;
-    public final Set<String> preciosExtra = new HashSet<>(); // Llevar a clase precio
+    public final Set<String> preciosExtra = new HashSet<>();
+//    public final Set<String> preciosExtra = new HashSet<>();
 
     public Pizza(String masa, String tipoPizza, String tamano) {
         this.masa = masa;
@@ -28,6 +30,14 @@ public class Pizza {
     }
 
     public Pizza() {
+    }
+
+    public double getPrecioTotal() {
+        return precioTotal;
+    }
+
+    public void setPrecioTotal(double precioTotal) {
+        this.precioTotal = precioTotal;
     }
 
     public void setMasa(String masa) {
@@ -101,7 +111,7 @@ public class Pizza {
         return totalFormateado;
     }
 
-    public void generarTicket() throws IOException {
+    public void generarTicket(String tipoTicket) throws IOException {
         LocalDateTime date = LocalDateTime.now();
         String formato;
         String texto = "";
@@ -110,26 +120,33 @@ public class Pizza {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH'h' mm'm' ss's'");
         formato = date.format(formatter);
 
-        for (String ingredientes : preciosExtra) {
-            textoIngredinetes += ingredientes.toUpperCase() + ": " + precios.buscarPrecio(ingredientes) + "€\n";
-        }
-
-        texto += "MASA --> " + this.masa + ": " + precios.buscarPrecio(this.masa) + "€"
-                + "\nTIPO DE PIZZA --> " + this.tipoPizza + ": " + precios.buscarPrecio(this.tipoPizza) + "€"
-                + "\nTAMAÑO PIZZA --> " + this.tamano + ": " + precios.buscarPrecio(this.tamano) + "%"
-                + "\nINGREDITENES\n" + textoIngredinetes;
-
         Path fichero = Paths.get(formato + "-ticket.txt");
 
-        try (Writer bf = Files.newBufferedWriter(fichero)  ) {
-            bf.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
-        }
-        
+        if (tipoTicket.equalsIgnoreCase("pizzaGusto")) {
+
+            for (String ingredientes : preciosExtra) {
+                textoIngredinetes += ingredientes.toUpperCase() + ": " + precios.buscarPrecio(ingredientes) + "€\n";
+            }
+
+            texto += "MASA --> " + this.masa + ": " + precios.buscarPrecio(this.masa) + "€"
+                    + "\nTIPO DE PIZZA --> " + this.tipoPizza + ": " + precios.buscarPrecio(this.tipoPizza) + "€"
+                    + "\nTAMAÑO PIZZA --> " + this.tamano + ": " + precios.buscarPrecio(this.tamano) + "%"
+                    + "\nINGREDITENES\n" + textoIngredinetes;
+            try (Writer bf = Files.newBufferedWriter(fichero)) {
+                bf.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
+            }
 //           try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 //                new FileOutputStream(formato + "-ticket.txt"), "utf-8"))) {
 //            writer.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
 //        }
-
+        } else {
+            
+            texto +="";
+            
+            try (Writer bf = Files.newBufferedWriter(fichero)) {
+                bf.write(texto + "€\n¡Gracias por su compra!");
+            }            
+        }
     }
-    
+
 }

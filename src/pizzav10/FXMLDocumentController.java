@@ -153,19 +153,6 @@ public class FXMLDocumentController implements Initializable {
     private Tab tabPizzaGusto;
     @FXML
     private Button botonGenerarTicket;
-
-    //LISTAS
-    ObservableList<String> listaTipoPizzas = FXCollections.observableArrayList("Basica", "Cuatro Quesos", "Barbacoa", "Mexicana");
-    ObservableList<String> listaIngredientes = FXCollections.observableArrayList("Sin extra", "Jamon", "Queso", "Tomate", "Cebolla", "Olivas", "Picante");
-    ObservableList<String> listaTamanos = FXCollections.observableArrayList("Grande", "Mediana", "Pequeña");
-    ObservableList<String> list = FXCollections.observableArrayList();
-
-    //OBJETOS
-    Pizza pizza = new Pizza();
-    Precios precios = new Precios();
-
-    //ATRIBUTOS
-    String tipoMasa, tipoPizza, tamano;
     @FXML
     private Tab tab2;
     @FXML
@@ -203,6 +190,21 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private Pane paneOlivas1;
 
+    //LISTAS
+    ObservableList<String> listaTipoPizzas = FXCollections.observableArrayList("Basica", "Cuatro Quesos", "Barbacoa", "Mexicana");
+    ObservableList<String> listaIngredientes = FXCollections.observableArrayList("Sin extra", "Jamon", "Queso", "Tomate", "Cebolla", "Olivas", "Picante");
+    ObservableList<String> listaTamanos = FXCollections.observableArrayList("Grande", "Mediana", "Pequeña");
+    ObservableList<String> list = FXCollections.observableArrayList();
+
+    //OBJETOS
+    Pizza pizza = new Pizza();
+    Precios precios = new Precios();
+
+    //ATRIBUTOS
+    String tipoMasa, tipoPizza, tamano;
+    double numeros = 0.0;
+    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         cbTipoPizza.setItems(listaTipoPizzas);
@@ -231,7 +233,6 @@ public class FXMLDocumentController implements Initializable {
 //        STYLE_CLASS_SPLIT_ARROWS_VERTICAL
 //        STYLE_CLASS_SPLIT_ARROWS_HORIZONTAL
         //TAB PRECIOS
-
         paneJamon.setVisible(false);
         paneQueso.setVisible(false);
         paneTomate.setVisible(false);
@@ -254,26 +255,9 @@ public class FXMLDocumentController implements Initializable {
 
     // Nuestros productos
     @FXML
-    private void comprarPizza(ActionEvent event) {
-        double total, precioCuatroQuesos = 0.0, precioBarbacoa = 0.0, precioMargarita = 0.0;
-        if (cbCuatroQuesos.isSelected()) {
-            precioCuatroQuesos = 11.50;
-        }
-        if (cbBarbacoa.isSelected()) {
-            precioBarbacoa = 10.50;
-        }
-        if (cbMargarita.isSelected()) {
-            precioMargarita = 9.95;
-        }
-
-        total = precioCuatroQuesos + precioBarbacoa + precioMargarita;
-
-        if (total == 0.0) {
-            labelTotal.setText("0€");
-        } else {
-            labelTotal.setText(total + "€");
-        }
-
+    private void comprarPizza(ActionEvent event) throws IOException {
+        pizza.setPrecioTotal(numeros);
+        pizza.generarTicket("");
     }
 
     //Pizza al gusto
@@ -610,7 +594,7 @@ public class FXMLDocumentController implements Initializable {
         alertaTicketGenerado.setHeaderText("Ticket generado. ¡Gracias por su compra!");
 
         if (tipoMasa != null && tipoPizza != null && tamano != null) {
-            pizza.generarTicket();
+            pizza.generarTicket("pizzaGusto");
             alertaTicketGenerado.showAndWait();
         } else {
             alertaFaltaIngredientes.showAndWait();
@@ -649,6 +633,22 @@ public class FXMLDocumentController implements Initializable {
 //            selectionModel
         }
 
+    }
+
+    @FXML
+    private void anadirCarro(ActionEvent event) {
+        
+        if (this.cbCuatroQuesos.isSelected()) {
+            numeros += +11.5;
+        }
+        if (this.cbBarbacoa.isSelected()) {
+            numeros += +10.5;
+        }
+        if (this.cbMargarita.isSelected()) {
+            numeros += +9.95;
+        }
+
+        this.labelTotal.setText(numeros + "€");
     }
 
 }
