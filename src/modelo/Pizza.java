@@ -1,32 +1,44 @@
 package modelo;
 
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Optional;
 import java.util.Set;
+import java.util.StringTokenizer;
+import java.util.stream.Stream;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class Pizza {
 
     Precios precios = new Precios();
-
     private double precioTotal;
     private String masa;
     private String tipoPizza;
     private String tamano;
-    static int contador;
+    private boolean seleccionarCarpeta = false;
+    private File dir = null;
+
     public final Set<String> preciosExtra = new HashSet<>();
-//    public final Set<String> preciosExtra = new HashSet<>();
+    public final Set<String> nuestrasPizzas = new HashSet<>();
 
     public Pizza(String masa, String tipoPizza, String tamano) {
         this.masa = masa;
         this.tipoPizza = tipoPizza;
         this.tamano = tamano;
-        contador++;
     }
 
     public Pizza() {
@@ -82,7 +94,7 @@ public class Pizza {
         return respuesta;
     }
 
-    public double calcularPrecio() { // Se queda aqui
+    public double calcularPrecio() {
 
         //ATRIBUTOS
         double total, precioMasa, precioTipo, precioIngredientes = 0.0, precioTamano = 1.0, totalFormateado, precio;
@@ -100,8 +112,9 @@ public class Pizza {
         }
 
         //CALCULO PRECIO TAMAÑO
-        if (precios.buscarPrecio(getTamano()) != 0.0) {
+        if (precios.buscarPrecio(tamano) != 0.0) {
             precioTamano = precios.buscarPrecio(getTamano());
+
         }
 
         total = precioMasa + precioTipo + precioIngredientes;
@@ -112,17 +125,25 @@ public class Pizza {
     }
 
     public void generarTicket(String tipoTicket) throws IOException {
+
         LocalDateTime date = LocalDateTime.now();
         String formato;
         String texto = "";
         String textoIngredinetes = "";
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd-HH'h' mm'm' ss's'");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd - HH'h' mm'm' ss's'");
         formato = date.format(formatter);
 
-        Path fichero = Paths.get(formato + "-ticket.txt");
-
+//        if (seleccionarCarpeta == false) {
+//            DirectoryChooser df = new DirectoryChooser();
+//            dir = df.showDialog(new Stage());
+//            seleccionarCarpeta = true;
+//        } //Lo hize con el directoryChooser tambien, pero prefiro que guarde el tiquet en la carpeta directamente que yo he elegido
         if (tipoTicket.equalsIgnoreCase("pizzaGusto")) {
+
+            Path fichero = Paths.get("PizzaGusto - " + formato + "-ticket.txt");
+            String destino = ".\\src\\pizzav10\\Tickets\\" + fichero;
+            Path directorio = Paths.get(destino);
 
             for (String ingredientes : preciosExtra) {
                 textoIngredinetes += ingredientes.toUpperCase() + ": " + precios.buscarPrecio(ingredientes) + "€\n";
@@ -132,21 +153,56 @@ public class Pizza {
                     + "\nTIPO DE PIZZA --> " + this.tipoPizza + ": " + precios.buscarPrecio(this.tipoPizza) + "€"
                     + "\nTAMAÑO PIZZA --> " + this.tamano + ": " + precios.buscarPrecio(this.tamano) + "%"
                     + "\nINGREDITENES\n" + textoIngredinetes;
-            try (Writer bf = Files.newBufferedWriter(fichero)) {
-                bf.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
+
+            try (BufferedWriter salida = Files.newBufferedWriter(directorio.toAbsolutePath(), StandardOpenOption.CREATE)) {
+
+                salida.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
+
             }
 //           try (Writer writer = new BufferedWriter(new OutputStreamWriter(
 //                new FileOutputStream(formato + "-ticket.txt"), "utf-8"))) {
 //            writer.write(texto + "----------------------\nPRECIO TOTAL: " + this.calcularPrecio() + "€\n¡Gracias por su compra!");
 //        }
-        } else {
+        } else if (tipoTicket.equalsIgnoreCase("nuestrasPizzas")){
+            double total = 0.0;
             
-            texto +="";
-            
-            try (Writer bf = Files.newBufferedWriter(fichero)) {
-                bf.write(texto + "€\n¡Gracias por su compra!");
-            }            
+            Path fichero = Paths.get("NuestrasPizzas - " + formato + "-ticket.txt");
+            String destino = ".\\src\\pizzav10\\Tickets\\" + fichero;
+            Path directorio = Paths.get(destino);
+
+            for (String pizzas : nuestrasPizzas) {
+                total += precios.buscarPrecio(pizzas); 
+                texto += pizzas + ": " + precios.buscarPrecio(pizzas) + "€\n";
+            }
+
+
+            try (BufferedWriter salida = Files.newBufferedWriter(directorio.toAbsolutePath(), StandardOpenOption.CREATE)) {
+                salida.write(texto + "----------------------\nPRECIO TOTAL: " + total + "€\n¡Gracias por su compra!");
+            }
         }
+
+    }
+
+    public void cargarPrecios(File archivoOrigen) throws IOException {
+        String leido, categoria, cantidad;
+        double precio;
+        String destino = archivoOrigen.getAbsolutePath();
+        Path archivo = Paths.get(destino);
+
+        Stream<String> datos = Files.lines(archivo);
+        Iterator<String> it = datos.iterator();
+        while (it.hasNext()) {
+            leido = it.next();
+
+            StringTokenizer t1 = new StringTokenizer(leido, ":");
+
+            categoria = t1.nextToken();
+            cantidad = t1.nextToken();
+            precio = Double.parseDouble(cantidad);
+
+            precios.precios.put(categoria, precio);
+        }
+
     }
 
 }

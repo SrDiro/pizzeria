@@ -5,36 +5,36 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringTokenizer;
 import java.util.stream.Stream;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
 public class Precios {
-    
-    private final Map<String, Double> precios = new HashMap<>();
-        
+
+    public final Map<String, Double> precios = new HashMap<>();
+
     public void modificarPrecios(String nombre, double cantidad) {
         precios.computeIfPresent(nombre, (k, v) -> cantidad);
     }
-        
+
     public double buscarPrecio(String nombre) {
         double precio;
-        
         if (precios.get(nombre) == null) {
             precio = 0.0;
         } else {
             precio = precios.get(nombre);
         }
-        
+
         return precio;
     }
-    
-    
-     public void cargarPrecios(File archivoOrigen) {
+
+    public void cargarPrecios(File archivoOrigen) {
         String leido, categoria, cantidad;
         double precio;
         String destino = archivoOrigen.getAbsolutePath();
@@ -55,14 +55,14 @@ public class Precios {
             }
 
             Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-            dialogoAlerta.setTitle("PIZZA PLANET");
+            dialogoAlerta.setTitle("RedHotPizza");
             dialogoAlerta.setHeaderText("Los precios se han cargado con exito");
 
             Optional<ButtonType> result = dialogoAlerta.showAndWait();
 
         } catch (Exception e) {
             Alert dialogoAlerta = new Alert(Alert.AlertType.INFORMATION);
-            dialogoAlerta.setTitle("PIZZA PLANET");
+            dialogoAlerta.setTitle("RedHotPizza");
             dialogoAlerta.setHeaderText("Error al cargar los precios");
 
             Optional<ButtonType> result = dialogoAlerta.showAndWait();
@@ -70,5 +70,4 @@ public class Precios {
 
     }
 
-   
 }

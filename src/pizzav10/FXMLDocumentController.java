@@ -189,6 +189,12 @@ public class FXMLDocumentController implements Initializable {
     private Pane paneCebolla1;
     @FXML
     private Pane paneOlivas1;
+    @FXML
+    private Pane panePizzaCuatroQuesos;
+    @FXML
+    private Pane panePizzaBarbacoa;
+    @FXML
+    private Pane panePizzaMargarita;
 
     //LISTAS
     ObservableList<String> listaTipoPizzas = FXCollections.observableArrayList("Basica", "Cuatro Quesos", "Barbacoa", "Mexicana");
@@ -201,9 +207,10 @@ public class FXMLDocumentController implements Initializable {
     Precios precios = new Precios();
 
     //ATRIBUTOS
-    String tipoMasa, tipoPizza, tamano;
-    double numeros = 0.0;
-    
+    String tipoMasa, tipoPizza, tamano = "pequeña";
+    double total = 0.0;
+
+    boolean entrar = false;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -241,7 +248,14 @@ public class FXMLDocumentController implements Initializable {
         paneNotFound.setVisible(false);
         labelNotFound.setVisible(false);
 
+        //Nuestras Pizzas
+        panePizzaCuatroQuesos.setDisable(true);
+        panePizzaBarbacoa.setDisable(true);
+        panePizzaMargarita.setDisable(true);
+
         //Pizza al gusto
+        labelTamano.setText(tamano);
+        
         paneMasa.setDisable(true);
         paneTipoPizza.setDisable(true);
         paneIngredientes.setDisable(true);
@@ -256,8 +270,15 @@ public class FXMLDocumentController implements Initializable {
     // Nuestros productos
     @FXML
     private void comprarPizza(ActionEvent event) throws IOException {
-        pizza.setPrecioTotal(numeros);
-        pizza.generarTicket("");
+        pizza.setPrecioTotal(total);
+        pizza.generarTicket("nuestrasPizzas");
+
+        Alert alertaTicketGenerado = new Alert(AlertType.INFORMATION);
+        alertaTicketGenerado.setTitle("RedHotPizza");
+        alertaTicketGenerado.setHeaderText("Ticket generado en la carpeta Tickets. ¡Gracias por su compra!");
+        
+        alertaTicketGenerado.showAndWait();
+
     }
 
     //Pizza al gusto
@@ -591,7 +612,7 @@ public class FXMLDocumentController implements Initializable {
 
         Alert alertaTicketGenerado = new Alert(AlertType.INFORMATION);
         alertaTicketGenerado.setTitle("RedHotPizza");
-        alertaTicketGenerado.setHeaderText("Ticket generado. ¡Gracias por su compra!");
+        alertaTicketGenerado.setHeaderText("Ticket generado en la carpeta Tickets. ¡Gracias por su compra!");
 
         if (tipoMasa != null && tipoPizza != null && tamano != null) {
             pizza.generarTicket("pizzaGusto");
@@ -603,13 +624,18 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void cargarPrecios(ActionEvent event) {
+    private void cargarPrecios(ActionEvent event) throws IOException {
 
         if (btCargarPrecios.isFocused()) {
             FileChooser fc = new FileChooser();
             File archivoOrigen = fc.showOpenDialog(new Stage());
             if (archivoOrigen != null) {
                 precios.cargarPrecios(archivoOrigen);
+                pizza.cargarPrecios(archivoOrigen);
+
+                panePizzaCuatroQuesos.setDisable(false);
+                panePizzaBarbacoa.setDisable(false);
+                panePizzaMargarita.setDisable(false);
 
                 paneMasa.setDisable(false);
                 paneTipoPizza.setDisable(false);
@@ -623,32 +649,39 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void tabClickar(Event event) {
-//        SingleSelectionModel<Tab> selectionModel = tabPizzaGusto.getSelectionModel();
 
-        if (panePedido.isDisable()) {
+        if (panePizzaCuatroQuesos.isDisable() && entrar == false) {
             Alert alertaFaltaCargaPrecios = new Alert(AlertType.WARNING);
             alertaFaltaCargaPrecios.setTitle("RedHotPizza");
             alertaFaltaCargaPrecios.setHeaderText("Por favor, cargue los precios primero.");
             alertaFaltaCargaPrecios.showAndWait();
-//            selectionModel
+            entrar = true;
         }
 
     }
 
     @FXML
     private void anadirCarro(ActionEvent event) {
-        
+        double precio = 0.0;
+        pizza.nuestrasPizzas.clear();
         if (this.cbCuatroQuesos.isSelected()) {
-            numeros += +11.5;
+            precio += +11.5;
+            pizza.nuestrasPizzas.add("Pizza Cuatro Quesos");
         }
         if (this.cbBarbacoa.isSelected()) {
-            numeros += +10.5;
+            precio += +10.5;
+
+            pizza.nuestrasPizzas.add("Pizza Barbacoa");
         }
         if (this.cbMargarita.isSelected()) {
-            numeros += +9.95;
+            precio += +9.95;
+
+            pizza.nuestrasPizzas.add("Pizza Margarita");
         }
 
-        this.labelTotal.setText(numeros + "€");
+        this.labelTotal.setText(precio + "€");
+
+        total = precio;
     }
 
 }
